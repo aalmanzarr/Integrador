@@ -7,8 +7,7 @@ import random
 
 app = Flask(__name__)
 CORS(app)
-y=[]
-z=[]
+
 now=datetime.datetime.now()
 tipo_medicion = {'sensor':'HC-SR04', 'variable':'DISTANCIA', 'unidades':'Cm'}
 mediciones=[
@@ -28,15 +27,17 @@ def getMedia():
                 media.append(mediciones[t].get('valor'))
         media = sum(media)/float(len(mediciones))  
         return media
+
 @app.route('/mediciones')
 def getAll():
-        media=getMedia()
-        return jsonify(media,mediciones)
+        return jsonify(mediciones)
 
 @app.route('/mediciones/grafica')
 def Graficador():
         media=getMedia()
         prom=[]
+        y=[]
+        z=[]
         for x in range(len(mediciones)):
                 y.append(mediciones[x].get('ID'))
                 z.append(mediciones[x].get('valor'))
@@ -48,9 +49,7 @@ def Graficador():
         return send_file(filename, mimetype='Distancia.png') 
 
 
-
-
 if __name__ == "__main__":
     app.run(debug=True,
             port=5000)
-            
+                        
